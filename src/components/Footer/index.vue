@@ -1,5 +1,5 @@
 <template>
-  <div class="box">header...</div>
+  <div>header...</div>
 </template>
 
 <script>
@@ -9,7 +9,4 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.box {
-  background-color: pink;
-}
 </style>
