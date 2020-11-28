@@ -1,13 +1,12 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import vueRouter from "vue-router";
-import Home from "../views/Home/index.vue";
-import Login from "../views/Login/index.vue";
-import Register from "../views/Register/index.vue";
-import Search from "../views/Search/index.vue";
+import Home from "@views/Home";
+import Login from "@views/Login";
+import Register from "@views/Register";
+import Search from "@views/Search";
 
 Vue.use(vueRouter);
-console.log(this);
 const push = VueRouter.prototype.push;
 
 VueRouter.prototype.push = function(location, onComplete, onAbort) {
