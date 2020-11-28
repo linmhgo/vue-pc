@@ -31,9 +31,9 @@
         </router-link>
       </h1>
       <div>
-        <form action="">
-          <input type="text" />
-          <button @click="search">搜索</button>
+        <form action="" @submit.prevent="search">
+          <input type="text" v-model="searchText" />
+          <button>搜索</button>
         </form>
       </div>
     </div>
@@ -43,9 +43,26 @@
 <script>
 export default {
   name: "Header",
+  data() {
+    return {
+      searchText: "",
+    };
+  },
   methods: {
     search() {
-      this.$router.push("/search");
+      // const { searchText } = this;
+      // const params = searchText ? `/${searchText}` : "";
+      // const location = "/search" + params;
+      // this.$router.push(location);
+      const location = {
+        name: "search",
+      };
+      if (this.searchText) {
+        location.params = {
+          searchText: this.searchText,
+        };
+      }
+      this.$router.push(location);
     },
   },
 };
