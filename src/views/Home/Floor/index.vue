@@ -173,7 +173,7 @@ export default {
             .jd-list {
               padding: 15px 0;
               overflow: hidden;
-
+              font-size: 12px;
               li {
                 list-style-type: none;
                 float: left;
