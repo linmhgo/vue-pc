@@ -75,8 +75,22 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+
 export default {
   name: "List-carousel",
+  computed: {
+    ...mapState({
+      bannersImg: (state) => state.home.bannersImg,
+    }),
+  },
+  methods: {
+    ...mapActions(["getBanners"]),
+  },
+  mounted() {
+    console.log(this.bannersImg);
+    this.getBanners();
+  },
 };
 </script>
 

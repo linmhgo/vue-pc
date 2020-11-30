@@ -1,11 +1,7 @@
 <template>
-  <div
-    class="Home-nav-out"
-    @mouseenter="isSearchShow = true"
-    @mouseleave="isSearchShow = false"
-  >
+  <div class="Home-nav-out" @mouseleave="isSearchShow = false">
     <div class="Home-nav">
-      <h2>全部商品分类</h2>
+      <h2 @mouseenter="isSearchShow = true">全部商品分类</h2>
       <a href="">服装馆</a>
       <a href="">美装馆</a>
       <a href="">尚品汇超市</a>
@@ -110,9 +106,9 @@ export default {
     },
   },
   mounted() {
-    console.log(this);
     // const lsit = await getBaseCategoryList();
     // this.baseCategoryLists = lsit.slice(0, 15);
+    console.log(this.baseCategoryLists.length);
     this.getbaseCategoryLists();
   },
 };
