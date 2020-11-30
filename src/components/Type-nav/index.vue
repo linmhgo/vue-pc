@@ -1,5 +1,9 @@
 <template>
-  <div class="Home-nav-out">
+  <div
+    class="Home-nav-out"
+    @mouseenter="isSearchShow = true"
+    @mouseleave="isSearchShow = false"
+  >
     <div class="Home-nav">
       <h2>全部商品分类</h2>
       <a href="">服装馆</a>
@@ -11,54 +15,60 @@
       <a href="">有趣</a>
       <a href="">秒杀</a>
     </div>
-    <div class="carousel-left" @click.prevent="searchList">
-      <ul
-        class="list"
-        v-for="baseCategoryList in baseCategoryLists"
-        :key="baseCategoryList.categoryId"
+    <transition name="search">
+      <div
+        class="carousel-left"
+        @click.prevent="searchList"
+        v-show="isHomeShow || isSearchShow"
       >
-        <li>
-          <a
-            href=""
-            :data-categoryName="baseCategoryList.categoryName"
-            :data-categoryType="1"
-            :data-categoryid="baseCategoryList.categoryId"
-            >{{ baseCategoryList.categoryName }}</a
-          >
-          <div class="box">
-            <dl
-              class="dl-lsit"
-              v-for="child in baseCategoryList.categoryChild"
-              :key="child.categoryId"
+        <ul
+          class="list"
+          v-for="baseCategoryList in baseCategoryLists"
+          :key="baseCategoryList.categoryId"
+        >
+          <li>
+            <a
+              href=""
+              :data-categoryName="baseCategoryList.categoryName"
+              :data-categoryType="1"
+              :data-categoryid="baseCategoryList.categoryId"
+              >{{ baseCategoryList.categoryName }}</a
             >
-              <dt>
-                <a
-                  href=""
-                  :data-categoryName="child.categoryName"
-                  :data-categoryType="2"
-                  :data-categoryid="child.categoryId"
-                  >{{ child.categoryName }}</a
-                >
-              </dt>
-              <dd
-                v-for="classify in child.categoryChild"
-                :key="classify.categoryId"
+            <div class="box">
+              <dl
+                class="dl-lsit"
+                v-for="child in baseCategoryList.categoryChild"
+                :key="child.categoryId"
               >
-                <span
-                  ><a
+                <dt>
+                  <a
                     href=""
-                    :data-categoryName="classify.categoryName"
-                    :data-categoryType="3"
-                    :data-categoryId="classify.categoryId"
-                    >{{ classify.categoryName }}</a
+                    :data-categoryName="child.categoryName"
+                    :data-categoryType="2"
+                    :data-categoryid="child.categoryId"
+                    >{{ child.categoryName }}</a
                   >
-                </span>
-              </dd>
-            </dl>
-          </div>
-        </li>
-      </ul>
-    </div>
+                </dt>
+                <dd
+                  v-for="classify in child.categoryChild"
+                  :key="classify.categoryId"
+                >
+                  <span
+                    ><a
+                      href=""
+                      :data-categoryName="classify.categoryName"
+                      :data-categoryType="3"
+                      :data-categoryId="classify.categoryId"
+                      >{{ classify.categoryName }}</a
+                    >
+                  </span>
+                </dd>
+              </dl>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -68,11 +78,12 @@ import { mapState, mapActions } from "vuex";
 
 export default {
   name: "Type-nav",
-  // data() {
-  //   return {
-  //     baseCategoryLists: [],
-  //   };
-  // },
+  data() {
+    return {
+      isHomeShow: this.$route.path === "/",
+      isSearchShow: false,
+    };
+  },
   computed: {
     ...mapState({
       baseCategoryLists: (state) => state.home.baseCategoryLists,
@@ -81,16 +92,21 @@ export default {
   methods: {
     ...mapActions(["getbaseCategoryLists"]),
     searchList(e) {
-      console.log(e.target.dataset);
+      this.isSearchShow = false;
       const { categoryname, categorytype, categoryid } = e.target.dataset;
       if (!categoryname) return;
-      this.$router.push({
+      const location = {
         name: "search",
         query: {
           categoryName: categoryname,
           [`category${categorytype}Id`]: categoryid,
         },
-      });
+      };
+      const { searchText } = this.$route.params;
+      if (searchText) {
+        location.params = this.$route.params;
+      }
+      this.$router.push(location);
     },
   },
   mounted() {
@@ -172,6 +188,13 @@ export default {
         font-size: 14px;
       }
     }
+  }
+  &.search-enter-active {
+    transition: 3s height;
+    overflow: hidden;
+  }
+  &.search-enter {
+    height: 0;
   }
 }
 </style>
