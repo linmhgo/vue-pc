@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import Typenav from "./Type-nav";
+import Typenav from "../../components/Type-nav";
 import ListCarousel from "./List-carousel";
 import TodayRecommend from "./TodayRecommend";
 import RankingList from "./Rankinglist";

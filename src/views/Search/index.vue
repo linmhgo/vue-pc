@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import TypeNve from "@views/Home/Type-nav";
+import TypeNve from "../../components/Type-nav";
 
 export default {
   name: "Search",
