@@ -11,14 +11,20 @@
       <a href="">有趣</a>
       <a href="">秒杀</a>
     </div>
-    <div class="carousel-left">
+    <div class="carousel-left" @click.prevent="searchList">
       <ul
         class="list"
         v-for="baseCategoryList in baseCategoryLists"
         :key="baseCategoryList.categoryId"
       >
         <li>
-          <a href="">{{ baseCategoryList.categoryName }}</a>
+          <a
+            href=""
+            :data-categoryName="baseCategoryList.categoryName"
+            :data-categoryType="1"
+            :data-categoryid="baseCategoryList.categoryId"
+            >{{ baseCategoryList.categoryName }}</a
+          >
           <div class="box">
             <dl
               class="dl-lsit"
@@ -26,14 +32,26 @@
               :key="child.categoryId"
             >
               <dt>
-                <a href="">{{ child.categoryName }}</a>
+                <a
+                  href=""
+                  :data-categoryName="child.categoryName"
+                  :data-categoryType="2"
+                  :data-categoryid="child.categoryId"
+                  >{{ child.categoryName }}</a
+                >
               </dt>
               <dd
                 v-for="classify in child.categoryChild"
                 :key="classify.categoryId"
               >
                 <span
-                  ><a href="">{{ classify.categoryName }}</a>
+                  ><a
+                    href=""
+                    :data-categoryName="classify.categoryName"
+                    :data-categoryType="3"
+                    :data-categoryId="classify.categoryId"
+                    >{{ classify.categoryName }}</a
+                  >
                 </span>
               </dd>
             </dl>
@@ -45,18 +63,41 @@
 </template>
 
 <script>
-import { getBaseCategoryList } from "@api/home";
+// import { getBaseCategoryList } from "@api/home";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "Type-nav",
-  data() {
-    return {
-      baseCategoryLists: [],
-    };
+  // data() {
+  //   return {
+  //     baseCategoryLists: [],
+  //   };
+  // },
+  computed: {
+    ...mapState({
+      baseCategoryLists: (state) => state.home.baseCategoryLists,
+    }),
   },
-  async mounted() {
-    const lsit = await getBaseCategoryList();
-    this.baseCategoryLists = lsit.slice(0, 15);
+  methods: {
+    ...mapActions(["getbaseCategoryLists"]),
+    searchList(e) {
+      console.log(e.target.dataset);
+      const { categoryname, categorytype, categoryid } = e.target.dataset;
+      if (!categoryname) return;
+      this.$router.push({
+        name: "search",
+        query: {
+          categoryName: categoryname,
+          [`category${categorytype}Id`]: categoryid,
+        },
+      });
+    },
+  },
+  mounted() {
+    console.log(this);
+    // const lsit = await getBaseCategoryList();
+    // this.baseCategoryLists = lsit.slice(0, 15);
+    this.getbaseCategoryLists();
   },
 };
 </script>
