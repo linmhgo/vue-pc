@@ -2,7 +2,17 @@
   <div class="commodity-lsit">
     <div class="carousel-content">
       <div class="carousel-center">
-        <img src="./images/banner1.jpg" alt="" />
+        <!-- <div class="swiper-container">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="img in bannersImg" :key="img.id">
+              <img :src="img.imgUrl" alt="" class="index-img" />
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </div> -->
+        <Carousel :carouselImg="bannersImg" />
       </div>
       <div class="carousel-right">
         <h2>
@@ -76,9 +86,16 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import Carousel from "../../../components/Carousel";
+// import Swiper, { Navigation, Pagination } from "swiper";
+// import "swiper/swiper-bundle.min.css";
+// Swiper.use([Navigation, Pagination]);
 
 export default {
   name: "List-carousel",
+  components: {
+    Carousel,
+  },
   computed: {
     ...mapState({
       bannersImg: (state) => state.home.bannersImg,
@@ -87,9 +104,31 @@ export default {
   methods: {
     ...mapActions(["getBanners"]),
   },
-  mounted() {
-    console.log(this.bannersImg);
-    this.getBanners();
+  async mounted() {
+    await this.getBanners();
+
+    // this.$nextTick(() => {
+    //   new Swiper(".swiper-container", {
+    //     // direction: "vertical", // 垂直切换选项
+    //     loop: true, // 循环模式选项
+    //     // autoplay: true,
+    //     // 如果需要分页器
+    //     pagination: {
+    //       el: ".swiper-pagination",
+    //     },
+
+    //     // 如果需要前进后退按钮
+    //     navigation: {
+    //       nextEl: ".swiper-button-next",
+    //       prevEl: ".swiper-button-prev",
+    //     },
+
+    //     // 如果需要滚动条
+    //     // scrollbar: {
+    //     //   el: ".swiper-scrollbar",
+    //     // },
+    //   });
+    // });
   },
 };
 </script>
@@ -100,11 +139,13 @@ export default {
   height: 464px;
   display: flex;
   position: relative;
+
   .carousel-center {
+    padding: 5px;
     width: 730px;
     height: 455px;
     margin-left: 210px;
-    padding: 5px;
+    overflow: hidden;
   }
   .carousel-right {
     width: 250px;

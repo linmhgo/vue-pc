@@ -5,13 +5,17 @@
     <TodayRecommend />
     <RankingList />
     <Like />
-    <Floor />
-    <Floor />
+    <Floor
+      v-for="(banner, index) in floorsData"
+      :key="index"
+      :banner="banner"
+    />
     <Brand />
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 import Typenav from "../../components/Type-nav";
 import ListCarousel from "./List-carousel";
 import TodayRecommend from "./TodayRecommend";
@@ -30,6 +34,18 @@ export default {
     Like,
     Floor,
     Brand,
+  },
+  computed: {
+    ...mapState({
+      floorsData: (state) => state.home.floorsData,
+    }),
+  },
+  methods: {
+    ...mapActions(["getFloorsData"]),
+  },
+  mounted() {
+    console.log(this);
+    this.getFloorsData();
   },
 };
 </script>
