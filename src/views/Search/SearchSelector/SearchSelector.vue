@@ -29,18 +29,12 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "SearchSelector",
   computed: {
     ...mapGetters(["trademarkList", "attrsList"]),
-  },
-  methods: {
-    ...mapActions(["getProductList"]),
-  },
-  mounted() {
-    this.getProductList();
   },
 };
 </script>
