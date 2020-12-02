@@ -20,7 +20,7 @@ VueRouter.prototype.replace = function(location, onComplete, onAbort) {
   if (onComplete && onAbort) {
     return replace.call(this, location, onComplete, onAbort);
   }
-  return push.replace.call(this, location, onComplete, () => {});
+  return replace.call(this, location, onComplete, () => {});
 };
 
 export default new vueRouter({

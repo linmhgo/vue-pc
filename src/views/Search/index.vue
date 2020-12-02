@@ -11,15 +11,32 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x" @click="delKeyword" v-show="options.keyword">
+              关键词: {{ options.keyword }}<i>×</i>
+            </li>
+            <li
+              class="with-x"
+              v-show="options.categoryName"
+              @click="delCategory"
+            >
+              分类名称: {{ options.categoryName }}<i>×</i>
+            </li>
+            <li class="with-x" v-show="options.trademark" @click="delTrademark">
+              品牌: {{ options.trademark.split(":")[1] }}<i>×</i>
+            </li>
+            <li
+              class="with-x"
+              v-for="(prop, index) in options.props"
+              :key="prop"
+              @click="delProps(index)"
+            >
+              {{ prop.split(":")[2] }} {{ prop.split(":")[1] }}<i>×</i>
+            </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector :addTrademark="addTrademark" @add-props="addProps" />
 
         <!--details-->
         <div class="details clearfix">
@@ -129,6 +146,20 @@ import TypeNav from "@comps/Type-nav";
 import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
   name: "Search",
+  data() {
+    return {
+      options: {
+        category3Id: "",
+        categoryName: "",
+        keyword: "",
+        order: "",
+        pageNo: 1,
+        pageSize: 5,
+        props: [],
+        trademark: "",
+      },
+    };
+  },
   components: {
     SearchSelector,
     TypeNav,
@@ -138,10 +169,73 @@ export default {
   },
   methods: {
     ...mapActions(["getProductList"]),
+    undateProductList() {
+      const { searchText: keyword } = this.$route.params;
+      const {
+        categoryName,
+        category1Id,
+        category2Id,
+        category3Id,
+      } = this.$route.query;
+      const options = {
+        ...this.options,
+        keyword,
+        categoryName,
+        category1Id,
+        category2Id,
+        category3Id,
+      };
+      this.options = options;
+      this.getProductList(options);
+    },
+    delKeyword() {
+      this.options.keyword = "";
+      this.$bus.$emit("delSearchText");
+      console.log(this.$router);
+      this.$router.replace({
+        name: "search",
+        query: this.$route.query,
+      });
+    },
+    delCategory() {
+      this.options.categoryName = "";
+      this.options.category1Id = "";
+      this.options.category2Id = "";
+      this.options.category3Id = "";
+      this.$router.replace({
+        name: "search",
+        params: this.$route.params,
+      });
+    },
+    //添加品牌标签
+    addTrademark(trademark) {
+      this.options.trademark = trademark;
+      this.undateProductList();
+    },
+    //删除品牌标签
+    delTrademark() {
+      this.options.trademark = "";
+      this.undateProductList();
+    },
+    //添加品牌属性
+    addProps(props) {
+      this.options.props.push(props);
+      this.undateProductList();
+    },
+    //删除品牌属性
+    delProps(index) {
+      this.options.props.splice(index, 1);
+      this.undateProductList();
+    },
   },
   mounted() {
     console.log(this);
-    this.getProductList({});
+    this.undateProductList();
+  },
+  watch: {
+    $route() {
+      this.undateProductList();
+    },
   },
 };
 </script>

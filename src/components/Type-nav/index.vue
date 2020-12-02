@@ -1,7 +1,11 @@
 <template>
-  <div class="Home-nav-out" @mouseleave="isSearchShow = false">
+  <div
+    class="Home-nav-out"
+    @mouseleave="isSearchShow = false"
+    @mouseenter="isSearchShow = true"
+  >
     <div class="Home-nav">
-      <h2 @mouseenter="isSearchShow = true">全部商品分类</h2>
+      <h2>全部商品分类</h2>
       <a href="">服装馆</a>
       <a href="">美装馆</a>
       <a href="">尚品汇超市</a>
@@ -102,7 +106,11 @@ export default {
       if (searchText) {
         location.params = this.$route.params;
       }
-      this.$router.push(location);
+      if (this.$route.name === "search") {
+        this.$router.replace(location);
+      } else {
+        this.$router.push(location);
+      }
     },
   },
   mounted() {

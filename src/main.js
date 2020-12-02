@@ -8,6 +8,9 @@ import store from "./store";
 import "./mock/mockServer";
 
 new Vue({
+  beforeCreate() {
+    Vue.prototype.$bus = this;
+  },
   render: (h) => h(App),
   router,
   store,
