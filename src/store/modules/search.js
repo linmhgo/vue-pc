@@ -18,6 +18,15 @@ export default {
     goodsList(state) {
       return state.productLists.goodsList;
     },
+    pageSize(state) {
+      return state.productLists.pageSize;
+    },
+    total(state) {
+      return state.productLists.total;
+    },
+    pageNo(state) {
+      return state.productLists.pageNo;
+    },
   },
   actions: {
     async getProductList({ commit }, data = {}) {

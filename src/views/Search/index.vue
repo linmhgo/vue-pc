@@ -43,23 +43,51 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li
+                  :class="{ active: options.order.indexOf('1') > -1 }"
+                  @click="setOrder('1')"
+                >
+                  <a
+                    >综合
+                    <i
+                      :class="{
+                        iconfont: true,
+                        'icon-direction-down': isDescAsc,
+                        'icon-direction-up': !isDescAsc,
+                      }"
+                  /></a>
                 </li>
                 <li>
-                  <a href="#">销量</a>
+                  <a>销量</a>
                 </li>
                 <li>
-                  <a href="#">新品</a>
+                  <a>新品</a>
                 </li>
                 <li>
-                  <a href="#">评价</a>
+                  <a>评价</a>
                 </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li
+                  class="iconPrice"
+                  @click="setOrder('2')"
+                  :class="{ active: options.order.indexOf('2') > -1 }"
+                >
+                  <a
+                    >价格<span
+                      ><i
+                        :class="{
+                          iconfont: true,
+                          'icon-arrow-up-filling': true,
+                          iActive:
+                            options.order.indexOf('2') > -1 && !isIactiveShow,
+                        }" /><i
+                        :class="{
+                          iconfont: true,
+                          'icon-arrow-down-filling': true,
+                          iActive:
+                            options.order.indexOf('2') > -1 && isIactiveShow,
+                        }" /></span
+                  ></a>
+                  <!-- 前面加这个options.order.indexOf('2')是设置默认样式 -->
                 </li>
               </ul>
             </div>
@@ -105,34 +133,18 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
+          <div class="block">
+            <span class="demonstration">完整功能</span>
+            <el-pagination
+              :page-sizes="[5, 10, 15, 20]"
+              :page-size="7"
+              :total="total"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="options.pageNo"
+              layout=" prev, pager, next, jumper, sizes,total"
+            >
+            </el-pagination>
           </div>
         </div>
       </div>
@@ -152,12 +164,14 @@ export default {
         category3Id: "",
         categoryName: "",
         keyword: "",
-        order: "",
-        pageNo: 1,
+        order: "1:desc",
+        pageNo: 3,
         pageSize: 5,
         props: [],
         trademark: "",
       },
+      isIactiveShow: true,
+      isDescAsc: true,
     };
   },
   components: {
@@ -165,11 +179,11 @@ export default {
     TypeNav,
   },
   computed: {
-    ...mapGetters(["goodsList"]),
+    ...mapGetters(["goodsList", "total"]),
   },
   methods: {
     ...mapActions(["getProductList"]),
-    undateProductList() {
+    undateProductList(pageNo) {
       const { searchText: keyword } = this.$route.params;
       const {
         categoryName,
@@ -184,6 +198,7 @@ export default {
         category1Id,
         category2Id,
         category3Id,
+        pageNo,
       };
       this.options = options;
       this.getProductList(options);
@@ -191,7 +206,6 @@ export default {
     delKeyword() {
       this.options.keyword = "";
       this.$bus.$emit("delSearchText");
-      console.log(this.$router);
       this.$router.replace({
         name: "search",
         query: this.$route.query,
@@ -227,9 +241,42 @@ export default {
       this.options.props.splice(index, 1);
       this.undateProductList();
     },
+    setOrder(order) {
+      let [keyOrder, vlaOrder] = this.options.order.split(":");
+      //切换红色背景，根据order的值是1还是2来进行切换
+
+      //第一次点击order不等于keyOrder，因为keyOrder先赋值
+      console.log(order, keyOrder);
+      if (order === keyOrder) {
+        if (order === "1") {
+          //点击一下那么就切换综合的升降序
+          this.isDescAsc = !this.isDescAsc;
+        } else {
+          this.isIactiveShow = !this.isIactiveShow;
+        }
+        //当一直点击时状态曲反
+        vlaOrder = vlaOrder === "desc" ? "asc" : "desc";
+      } else {
+        //第一次进来两个的状态判断
+        if (order === "1") {
+          vlaOrder = this.isDescAsc ? "desc" : "asc";
+        } else {
+          this.isIactiveShow = true;
+          vlaOrder = "asc";
+        }
+      }
+      this.options.order = `${order}:${vlaOrder}`;
+      this.undateProductList();
+    },
+    handleSizeChange(pageSize) {
+      this.options.pageSize = pageSize;
+      this.undateProductList();
+    },
+    handleCurrentChange(pageNo) {
+      this.undateProductList(pageNo);
+    },
   },
   mounted() {
-    console.log(this);
     this.undateProductList();
   },
   watch: {
@@ -336,6 +383,26 @@ export default {
             display: block;
             float: left;
             margin: 0 10px 0 0;
+            a i {
+              font-size: 12px;
+            }
+            .iActive {
+              color: rgba(255, 255, 255, 0.4);
+            }
+            .iconPrice a {
+              display: flex;
+              width: 38px;
+
+              span {
+                line-height: 7px;
+                display: flex;
+                flex-direction: column;
+                margin-top: 4px;
+                i {
+                  font-size: 12px;
+                }
+              }
+            }
 
             li {
               float: left;
