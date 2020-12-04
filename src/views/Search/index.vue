@@ -43,10 +43,7 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li
-                  :class="{ active: options.order.indexOf('1') > -1 }"
-                  @click="setOrder('1')"
-                >
+                <li :class="{ active: isOrder(1) > -1 }" @click="setOrder('1')">
                   <a
                     >综合
                     <i
@@ -69,7 +66,7 @@
                 <li
                   class="iconPrice"
                   @click="setOrder('2')"
-                  :class="{ active: options.order.indexOf('2') > -1 }"
+                  :class="{ active: isOrder(2) }"
                 >
                   <a
                     >价格<span
@@ -77,14 +74,12 @@
                         :class="{
                           iconfont: true,
                           'icon-arrow-up-filling': true,
-                          iActive:
-                            options.order.indexOf('2') > -1 && !isIactiveShow,
+                          iActive: isOrder(2) && !isIactiveShow,
                         }" /><i
                         :class="{
                           iconfont: true,
                           'icon-arrow-down-filling': true,
-                          iActive:
-                            options.order.indexOf('2') > -1 && isIactiveShow,
+                          iActive: isOrder(2) && isIactiveShow,
                         }" /></span
                   ></a>
                   <!-- 前面加这个options.order.indexOf('2')是设置默认样式 -->
@@ -135,7 +130,7 @@
           </div>
           <div class="block">
             <span class="demonstration">完整功能</span>
-            <el-pagination
+            <!-- <el-pagination
               :page-sizes="[5, 10, 15, 20]"
               :page-size="7"
               :total="total"
@@ -144,7 +139,14 @@
               :current-page="options.pageNo"
               layout=" prev, pager, next, jumper, sizes,total"
             >
-            </el-pagination>
+            </el-pagination> -->
+            <Pagination
+              :current-page="options.pageNo"
+              :pager-count="7"
+              :page-size="5"
+              :total="total"
+              @current-change="handleCurrentChange"
+            />
           </div>
         </div>
       </div>
@@ -154,6 +156,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import Pagination from "@comps/Pagination";
 import TypeNav from "@comps/Type-nav";
 import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
@@ -165,7 +168,7 @@ export default {
         categoryName: "",
         keyword: "",
         order: "1:desc",
-        pageNo: 3,
+        pageNo: 1,
         pageSize: 5,
         props: [],
         trademark: "",
@@ -177,13 +180,16 @@ export default {
   components: {
     SearchSelector,
     TypeNav,
+    Pagination,
   },
   computed: {
     ...mapGetters(["goodsList", "total"]),
   },
   methods: {
     ...mapActions(["getProductList"]),
-    undateProductList(pageNo) {
+    //注册请求函数，每次请求都会根据不同的参数请求不同的数据
+    undateProductList(pageNo = 1) {
+      //拿到query和params中的最新参数，然后赋值给options，最后拿到不同的数据
       const { searchText: keyword } = this.$route.params;
       const {
         categoryName,
@@ -203,6 +209,7 @@ export default {
       this.options = options;
       this.getProductList(options);
     },
+    //删除搜索的内容，用watch监听route变化就发送请求，会根据route的变化而请求不同的数据
     delKeyword() {
       this.options.keyword = "";
       this.$bus.$emit("delSearchText");
@@ -223,6 +230,8 @@ export default {
     },
     //添加品牌标签
     addTrademark(trademark) {
+      //点击的那个品牌就拿到不同的trademark值，最后拿到不同的请求数据
+      if (this.options.trademark) return;
       this.options.trademark = trademark;
       this.undateProductList();
     },
@@ -233,6 +242,7 @@ export default {
     },
     //添加品牌属性
     addProps(props) {
+      if (this.options.props.indexOf(props) > -1) return;
       this.options.props.push(props);
       this.undateProductList();
     },
@@ -268,12 +278,15 @@ export default {
       this.options.order = `${order}:${vlaOrder}`;
       this.undateProductList();
     },
-    handleSizeChange(pageSize) {
-      this.options.pageSize = pageSize;
-      this.undateProductList();
-    },
+    // handleSizeChange(pageSize) {
+    //   this.options.pageSize = pageSize;
+    //   this.undateProductList();
+    // },
     handleCurrentChange(pageNo) {
       this.undateProductList(pageNo);
+    },
+    isOrder(order) {
+      return this.options.order.indexOf(`${order}`) > -1;
     },
   },
   mounted() {

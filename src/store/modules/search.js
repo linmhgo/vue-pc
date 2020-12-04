@@ -6,6 +6,7 @@ export default {
       trademarkList: [],
       goodsList: [],
       attrsList: [],
+      total: 0,
     },
   },
   getters: {
