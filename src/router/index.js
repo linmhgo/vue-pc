@@ -5,6 +5,7 @@ import Home from "@views/Home";
 import Login from "@views/Login";
 import Register from "@views/Register";
 import Search from "@views/Search";
+import Detail from "@views/Detail";
 
 Vue.use(vueRouter);
 const push = VueRouter.prototype.push;
@@ -48,5 +49,13 @@ export default new vueRouter({
       path: "/search/:searchText?",
       component: Search,
     },
+    {
+      name: "detail",
+      path: "/detail/:id",
+      component: Detail,
+    },
   ],
+  scrollBehavior() {
+    return { x: 0, y: 0 };
+  },
 });

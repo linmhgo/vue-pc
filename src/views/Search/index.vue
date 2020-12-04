@@ -92,9 +92,11 @@
               <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
-                      ><img :src="goods.defaultImg"
-                    /></a>
+                    <router-link :to="`/detail/${goods.id}`"
+                      ><img
+                        :src="goods.defaultImg"
+                        @click="getProductDetailData(goods.id)"
+                    /></router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -186,7 +188,7 @@ export default {
     ...mapGetters(["goodsList", "total"]),
   },
   methods: {
-    ...mapActions(["getProductList"]),
+    ...mapActions(["getProductList", "getProductDetail"]),
     //注册请求函数，每次请求都会根据不同的参数请求不同的数据
     undateProductList(pageNo = 1) {
       //拿到query和params中的最新参数，然后赋值给options，最后拿到不同的数据
@@ -287,6 +289,9 @@ export default {
     },
     isOrder(order) {
       return this.options.order.indexOf(`${order}`) > -1;
+    },
+    getProductDetailData(id) {
+      this.getProductDetail(id);
     },
   },
   mounted() {
