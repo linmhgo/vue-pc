@@ -93,9 +93,7 @@
                 <div class="list-wrap">
                   <div class="p-img">
                     <router-link :to="`/detail/${goods.id}`"
-                      ><img
-                        :src="goods.defaultImg"
-                        @click="getProductDetailData(goods.id)"
+                      ><img :src="goods.defaultImg"
                     /></router-link>
                   </div>
                   <div class="price">
@@ -188,7 +186,7 @@ export default {
     ...mapGetters(["goodsList", "total"]),
   },
   methods: {
-    ...mapActions(["getProductList", "getProductDetail"]),
+    ...mapActions(["getProductList"]),
     //注册请求函数，每次请求都会根据不同的参数请求不同的数据
     undateProductList(pageNo = 1) {
       //拿到query和params中的最新参数，然后赋值给options，最后拿到不同的数据
@@ -289,9 +287,6 @@ export default {
     },
     isOrder(order) {
       return this.options.order.indexOf(`${order}`) > -1;
-    },
-    getProductDetailData(id) {
-      this.getProductDetail(id);
     },
   },
   mounted() {

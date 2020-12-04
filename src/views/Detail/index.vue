@@ -333,7 +333,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import ImageList from "./ImageList/ImageList";
 import Zoom from "./Zoom/Zoom";
 import TypeNav from "@comps/Type-nav";
@@ -348,8 +348,12 @@ export default {
   computed: {
     ...mapGetters(["spuSaleAttrList", "categoryView", "skuInfo"]),
   },
-  methods: {},
-  mounted() {},
+  methods: {
+    ...mapActions(["getProductDetail"]),
+  },
+  mounted() {
+    this.getProductDetail(this.$route.params.id);
+  },
 };
 </script>
 
