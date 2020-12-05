@@ -2,12 +2,16 @@ import axiso from "axios";
 import { Message } from "element-ui";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
+import getUserTempld from "./getUserTempld";
 
+const userTempId = getUserTempld();
 const instance = axiso.create({
   baseURL: "/api",
 });
 instance.interceptors.request.use((config) => {
   NProgress.start();
+  config.headers.userTempId = userTempId;
+
   return config;
 });
 instance.interceptors.response.use(

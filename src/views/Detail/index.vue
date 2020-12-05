@@ -88,21 +88,44 @@
                 <dt class="title">{{ spuSaleAttr.saleAttrName }}</dt>
                 <dd
                   changepirce="0"
-                  class="active"
+                  :class="{
+                    active:
+                      dlAactiveId === spuSaleAttrValue.id &&
+                      ddAactiveId === spuSaleAttrValue.baseSaleAttrId,
+                  }"
                   v-for="spuSaleAttrValue in spuSaleAttr.spuSaleAttrValueList"
                   :key="spuSaleAttrValue.id"
+                  @click="
+                    getActiveId(
+                      spuSaleAttrValue.id,
+                      spuSaleAttrValue.baseSaleAttrId
+                    )
+                  "
                 >
                   {{ spuSaleAttrValue.saleAttrValueName }}
                 </dd>
+                <!-- <dd>
+                  {{ spuSaleAttr.spuSaleAttrValueList[1].saleAttrValueName }}
+                </dd>
+                <dd>
+                  {{ spuSaleAttr.spuSaleAttrValueList[2].saleAttrValueName }}
+                </dd>
+                <dd>
+                  {{ spuSaleAttr.spuSaleAttrValueList[3].saleAttrValueName }}
+                </dd> -->
               </dl>
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <el-input-number
+                  class="elInput"
+                  v-model="num"
+                  controls-position="right"
+                  :min="1"
+                  :max="10"
+                ></el-input-number>
               </div>
-              <div class="add">
+              <div class="add" @click="addCart">
                 <a href="javascript:">加入购物车</a>
               </div>
             </div>
@@ -352,6 +375,9 @@ export default {
   data() {
     return {
       imgIndex: 0,
+      ddAactiveId: null,
+      dlAactiveId: null,
+      num: 1,
     };
   },
   components: {
@@ -363,9 +389,25 @@ export default {
     ...mapGetters(["spuSaleAttrList", "categoryView", "skuInfo"]),
   },
   methods: {
-    ...mapActions(["getProductDetail"]),
+    ...mapActions(["getProductDetail", "updateCartCount"]),
     imageListIndex(index) {
       this.imgIndex = index;
+    },
+    getActiveId(dlAactiveId, ddAactiveId) {
+      console.log(ddAactiveId, dlAactiveId);
+      this.dlAactiveId = dlAactiveId;
+      this.ddAactiveId = ddAactiveId;
+    },
+    addCart() {
+      try {
+        this.updateCartCount({
+          skuId: this.skuInfo.id,
+          skuNum: this.num,
+        });
+        this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
   mounted() {
@@ -542,7 +584,9 @@ export default {
               position: relative;
               float: left;
               margin-right: 15px;
-
+              .elInput {
+                width: 90px;
+              }
               .itxt {
                 width: 38px;
                 height: 37px;
@@ -579,7 +623,7 @@ export default {
 
             .add {
               float: left;
-
+              margin-left: 60px;
               a {
                 background-color: #e1251b;
                 padding: 0 25px;
