@@ -1,6 +1,11 @@
 <template>
   <div class="pagination">
-    <button @click="setCurrentPage(myCurrentPage - 1)">上一页</button>
+    <button
+      :disabled="myCurrentPage <= 1"
+      @click="setCurrentPage(myCurrentPage - 1)"
+    >
+      上一页
+    </button>
     <button :class="{ active: myCurrentPage === 1 }" @click="setCurrentPage(1)">
       1
     </button>
@@ -21,7 +26,12 @@
     >
       {{ totalPages }}
     </button>
-    <button @click="setCurrentPage(myCurrentPage + 1)">下一页</button>
+    <button
+      @click="setCurrentPage(myCurrentPage + 1)"
+      :disabled="myCurrentPage >= totalPages"
+    >
+      下一页
+    </button>
     <button>总数：{{ total }}</button>
   </div>
 </template>
@@ -103,6 +113,8 @@ export default {
   },
   methods: {
     setCurrentPage(id) {
+      if (id < 2 && id > this.totalPages) return;
+      console.log(id);
       this.myCurrentPage = id;
     },
   },
