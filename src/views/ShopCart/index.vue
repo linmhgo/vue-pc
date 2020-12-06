@@ -77,7 +77,7 @@
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a href="javascript:" @click="delChecked">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -134,6 +134,7 @@ export default {
       "getDeleteCart",
       "allCheckedCart",
       "clickAllChecked",
+      "delCheckedCart",
     ]),
     //商品cheked
     async inpStatus(skuId, isChecked) {
@@ -154,6 +155,10 @@ export default {
     //全部更新商品状态
     clickChecked() {
       this.clickAllChecked();
+    },
+    //删除部分数据
+    delChecked() {
+      this.delCheckedCart();
     },
   },
   watch: {

@@ -42,13 +42,16 @@ export default {
     clickAllChecked({ commit }) {
       commit("CLICK_ALL_CHECKED");
     },
+    //删除选中商品
+    delCheckedCart({ commit }) {
+      commit("DEL_CHECKED_CART");
+    },
   },
   mutations: {
     GET_CART_LIST(state, cartList) {
       state.cartList = cartList;
     },
     UPDATE_CART_COUNT(state, { skuId, skuNum }) {
-      // console.log(skuId, skuNum);
       state.cartList = state.cartList.map((cart) => {
         if (cart.skuId === skuId) {
           cart.skuNum += skuNum;
@@ -79,12 +82,17 @@ export default {
         state.allShow = false;
       }
     },
+    //下面全选或全不选功能
     CLICK_ALL_CHECKED(state) {
       state.allShow = !state.allShow;
       state.cartList = state.cartList.map((cart) => {
         cart.isChecked = state.allShow === true ? 1 : 0;
         return cart;
       });
+    },
+    //删除选中的商品
+    DEL_CHECKED_CART(state) {
+      state.cartList = state.cartList.filter((cart) => cart.isChecked !== 1);
     },
   },
 };
