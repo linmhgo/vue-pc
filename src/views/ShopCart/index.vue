@@ -36,7 +36,7 @@
             <a
               href="javascript:void(0)"
               class="mins"
-              @click="updateCartCount(cart.skuId, -1)"
+              @click="AddDelCartCount(cart.skuId, -1)"
               >-</a
             >
             <input
@@ -49,7 +49,7 @@
             <a
               href="javascript:void(0)"
               class="plus"
-              @click="updateCartCount(cart.skuId, 1)"
+              @click="AddDelCartCount(cart.skuId, 1)"
               >+</a
             >
           </li>
@@ -75,10 +75,13 @@
         <a href="#none">清除下柜商品</a>
       </div>
       <div class="money-box">
-        <div class="chosed">已选择 <span>0</span>件商品</div>
+        <div class="chosed">
+          已选择 <span>{{ total }}</span
+          >件商品
+        </div>
         <div class="sumprice">
-          <em>总价（不含运费） ：</em>
-          <i class="summoney">0</i>
+          <em>总价（不含运费）：</em>
+          <i class="summoney">{{ totalPrice }}</i>
         </div>
         <div class="sumbtn">
           <a class="sum-btn" href="###" target="_blank">结算</a>
@@ -102,9 +105,21 @@ export default {
     ...mapState({
       cartList: (state) => state.shopcart.cartList,
     }),
+    //商品总数
+    total() {
+      return this.cartList
+        .filter((cart) => cart.isChecked === 1)
+        .reduce((p, c) => p + c.skuNum, 0);
+    },
+    //商品总价
+    totalPrice() {
+      return this.cartList
+        .filter((cart) => cart.isChecked === 1)
+        .reduce((p, c) => p + c.skuNum * c.skuPrice, 0);
+    },
   },
   methods: {
-    ...mapActions(["getCartList", "getCheckCart"]),
+    ...mapActions(["getCartList", "getCheckCart", "updateCartCount"]),
     //商品cheked
     async inpStatus(skuId, isChecked) {
       console.log(isChecked);
@@ -114,7 +129,10 @@ export default {
       // this.getCartList();
     },
     //商品增加和减少
-    updateCartCount(skuId, skuNum) {},
+    AddDelCartCount(skuId, skuNum) {
+      console.log(skuId, skuNum);
+      this.updateCartCount({ skuId, skuNum });
+    },
   },
   mounted() {
     this.getCartList();

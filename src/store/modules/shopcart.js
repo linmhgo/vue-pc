@@ -27,12 +27,14 @@ export default {
       await reqGetCheckCart(skuId, isChecked);
       commit("GET_CHECK_CART", { skuId, isChecked });
     },
+    //购物车商品数量更新
   },
   mutations: {
     GET_CART_LIST(state, cartList) {
       state.cartList = cartList;
     },
     UPDATE_CART_COUNT(state, { skuId, skuNum }) {
+      // console.log(skuId, skuNum);
       state.cartList = state.cartList.map((cart) => {
         if (cart.skuId === skuId) {
           cart.skuNum += skuNum;
