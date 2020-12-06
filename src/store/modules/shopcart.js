@@ -1,4 +1,8 @@
-import { reqGetCartList, reqGetAddToCart } from "@api/shopcart";
+import {
+  reqGetCartList,
+  reqGetAddToCart,
+  reqGetCheckCart,
+} from "@api/shopcart";
 
 export default {
   state: {
@@ -6,15 +10,22 @@ export default {
   },
   getters: {},
   actions: {
+    //购物车数据请求
     async getCartList({ commit }) {
       const cartList = await reqGetCartList();
       console.log(cartList);
       commit("GET_CART_LIST", cartList);
     },
+    //购物车添加请求
     async updateCartCount({ commit }, { skuId, skuNum }) {
-      const a = await reqGetAddToCart(skuId, skuNum);
-      console.log(a);
+      await reqGetAddToCart(skuId, skuNum);
       commit("UPDATE_CART_COUNT", { skuId, skuNum });
+    },
+    //购物车商品checked请求
+    async getCheckCart({ commit }, { skuId, isChecked }) {
+      // console.log(skuId, isChecked);
+      await reqGetCheckCart(skuId, isChecked);
+      commit("GET_CHECK_CART", { skuId, isChecked });
     },
   },
   mutations: {
@@ -25,6 +36,15 @@ export default {
       state.cartList = state.cartList.map((cart) => {
         if (cart.skuId === skuId) {
           cart.skuNum += skuNum;
+        }
+        return cart;
+      });
+    },
+    //手动更新选没选中的数据
+    GET_CHECK_CART(state, { skuId, isChecked }) {
+      state.cartList = state.cartList.map((cart) => {
+        if (cart.skuId === skuId) {
+          cart.isChecked = isChecked;
         }
         return cart;
       });

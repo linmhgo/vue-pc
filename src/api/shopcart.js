@@ -19,7 +19,7 @@ export const reqGetAddToCart = (skuId, skuNum) => {
 export const reqGetCheckCart = (skuId, isChecked) => {
   return request({
     method: "GET",
-    url: `"/cart/checkCart/${skuId}/${isChecked}"`,
+    url: `/cart/checkCart/${skuId}/${isChecked}`,
   });
 };
 //删除购物车商品

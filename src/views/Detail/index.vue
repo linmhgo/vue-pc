@@ -398,6 +398,7 @@ export default {
       this.dlAactiveId = dlAactiveId;
       this.ddAactiveId = ddAactiveId;
     },
+    //添加购物车发送的请求，确保添加不能出错才跳转
     addCart() {
       try {
         this.updateCartCount({

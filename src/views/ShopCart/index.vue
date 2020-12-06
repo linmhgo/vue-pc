@@ -13,7 +13,12 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="cart in cartList" :key="cart.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" />
+            <input
+              type="checkbox"
+              name="chk_list"
+              :checked="cart.isChecked"
+              @click="inpStatus(cart.skuId, cart.isChecked)"
+            />
           </li>
           <li class="cart-list-con2">
             <img :src="cart.imgUrl" />
@@ -28,7 +33,12 @@
             <span class="price">{{ cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
+            <a
+              href="javascript:void(0)"
+              class="mins"
+              @click="updateCartCount(cart.skuId, -1)"
+              >-</a
+            >
             <input
               autocomplete="off"
               type="text"
@@ -36,7 +46,12 @@
               minnum="1"
               class="itxt"
             />
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a
+              href="javascript:void(0)"
+              class="plus"
+              @click="updateCartCount(cart.skuId, 1)"
+              >+</a
+            >
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ cart.skuNum * cart.skuPrice }}</span>
@@ -78,13 +93,28 @@ import { mapActions, mapState } from "vuex";
 
 export default {
   name: "ShopCart",
+  data() {
+    return {
+      isShow: true,
+    };
+  },
   computed: {
     ...mapState({
       cartList: (state) => state.shopcart.cartList,
     }),
   },
   methods: {
-    ...mapActions(["getCartList"]),
+    ...mapActions(["getCartList", "getCheckCart"]),
+    //商品cheked
+    async inpStatus(skuId, isChecked) {
+      console.log(isChecked);
+      isChecked = isChecked === 1 ? 0 : 1;
+      await this.getCheckCart({ skuId, isChecked });
+      //重新发送请求刷新更改过的请求
+      // this.getCartList();
+    },
+    //商品增加和减少
+    updateCartCount(skuId, skuNum) {},
   },
   mounted() {
     this.getCartList();
