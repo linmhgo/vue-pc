@@ -2,11 +2,13 @@ import {
   reqGetCartList,
   reqGetAddToCart,
   reqGetCheckCart,
+  reqGetDeleteCart,
 } from "@api/shopcart";
 
 export default {
   state: {
     cartList: [],
+    allShow: false,
   },
   getters: {},
   actions: {
@@ -27,7 +29,19 @@ export default {
       await reqGetCheckCart(skuId, isChecked);
       commit("GET_CHECK_CART", { skuId, isChecked });
     },
-    //购物车商品数量更新
+    //删除购物车商品
+    async getDeleteCart({ commit }, skuId) {
+      console.log(commit);
+      await reqGetDeleteCart(skuId);
+    },
+    //全部选中数据
+    allCheckedCart({ commit }) {
+      commit("ALL_CHECKED_CART");
+    },
+    //点击全选中取消数据
+    clickAllChecked({ commit }) {
+      commit("CLICK_ALL_CHECKED");
+    },
   },
   mutations: {
     GET_CART_LIST(state, cartList) {
@@ -42,12 +56,33 @@ export default {
         return cart;
       });
     },
-    //手动更新选没选中的数据
+    //手动更新数据的checked
     GET_CHECK_CART(state, { skuId, isChecked }) {
       state.cartList = state.cartList.map((cart) => {
         if (cart.skuId === skuId) {
           cart.isChecked = isChecked;
         }
+        return cart;
+      });
+    },
+    //全部更新商品状态
+    ALL_CHECKED_CART(state) {
+      const count = state.cartList.reduce((p, c) => {
+        if (c.isChecked === 1) {
+          ++p;
+        }
+        return p;
+      }, 0);
+      if (count === state.cartList.length) {
+        state.allShow = true;
+      } else {
+        state.allShow = false;
+      }
+    },
+    CLICK_ALL_CHECKED(state) {
+      state.allShow = !state.allShow;
+      state.cartList = state.cartList.map((cart) => {
+        cart.isChecked = state.allShow === true ? 1 : 0;
         return cart;
       });
     },

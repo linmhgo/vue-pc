@@ -57,7 +57,9 @@
             <span class="sum">{{ cart.skuNum * cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a class="sindelet" href="javascript:" @click="delCart(cart.skuId)"
+              >删除</a
+            >
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -66,7 +68,12 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" />
+        <input
+          class="chooseAll"
+          type="checkbox"
+          :checked="allShow"
+          @click="clickChecked"
+        />
         <span>全选</span>
       </div>
       <div class="option">
@@ -104,6 +111,7 @@ export default {
   computed: {
     ...mapState({
       cartList: (state) => state.shopcart.cartList,
+      allShow: (state) => state.shopcart.allShow,
     }),
     //商品总数
     total() {
@@ -119,10 +127,16 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getCartList", "getCheckCart", "updateCartCount"]),
+    ...mapActions([
+      "getCartList",
+      "getCheckCart",
+      "updateCartCount",
+      "getDeleteCart",
+      "allCheckedCart",
+      "clickAllChecked",
+    ]),
     //商品cheked
     async inpStatus(skuId, isChecked) {
-      console.log(isChecked);
       isChecked = isChecked === 1 ? 0 : 1;
       await this.getCheckCart({ skuId, isChecked });
       //重新发送请求刷新更改过的请求
@@ -130,8 +144,21 @@ export default {
     },
     //商品增加和减少
     AddDelCartCount(skuId, skuNum) {
-      console.log(skuId, skuNum);
       this.updateCartCount({ skuId, skuNum });
+    },
+    //删除购物车商品
+    async delCart(skuId) {
+      await this.getDeleteCart(skuId);
+      this.getCartList();
+    },
+    //全部更新商品状态
+    clickChecked() {
+      this.clickAllChecked();
+    },
+  },
+  watch: {
+    cartList() {
+      this.allCheckedCart();
     },
   },
   mounted() {
