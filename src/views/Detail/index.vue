@@ -90,16 +90,17 @@
                   changepirce="0"
                   :class="{
                     active:
-                      dlAactiveId === spuSaleAttrValue.id &&
-                      ddAactiveId === spuSaleAttrValue.baseSaleAttrId,
+                      (spuSaleAttrValue.id === checkedId[0] &&
+                        spuSaleAttr.baseSaleAttrId === 1) ||
+                      (spuSaleAttrValue.id === checkedId[1] &&
+                        spuSaleAttr.baseSaleAttrId === 2) ||
+                      (spuSaleAttrValue.id === checkedId[2] &&
+                        spuSaleAttr.baseSaleAttrId === 3),
                   }"
                   v-for="spuSaleAttrValue in spuSaleAttr.spuSaleAttrValueList"
                   :key="spuSaleAttrValue.id"
                   @click="
-                    getActiveId(
-                      spuSaleAttrValue.id,
-                      spuSaleAttrValue.baseSaleAttrId
-                    )
+                    getActiveId(spuSaleAttrValue.id, spuSaleAttr.baseSaleAttrId)
                   "
                 >
                   {{ spuSaleAttrValue.saleAttrValueName }}
@@ -375,8 +376,7 @@ export default {
   data() {
     return {
       imgIndex: 0,
-      ddAactiveId: null,
-      dlAactiveId: null,
+      checkedId: [],
       num: 1,
     };
   },
@@ -393,10 +393,17 @@ export default {
     imageListIndex(index) {
       this.imgIndex = index;
     },
-    getActiveId(dlAactiveId, ddAactiveId) {
-      console.log(ddAactiveId, dlAactiveId);
-      this.dlAactiveId = dlAactiveId;
-      this.ddAactiveId = ddAactiveId;
+    getActiveId(valueId, AttrId) {
+      console.log(this.checkedId);
+      if (AttrId === 1) {
+        this.checkedId[AttrId - 1] = valueId;
+      }
+      if (AttrId === 2) {
+        this.checkedId[AttrId - 1] = valueId;
+      }
+      if (AttrId === 3) {
+        this.checkedId[AttrId - 1] = valueId;
+      }
     },
     //添加购物车发送的请求，确保添加不能出错才跳转
     addCart() {
