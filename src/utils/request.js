@@ -3,6 +3,7 @@ import { Message } from "element-ui";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 import getUserTempld from "./getUserTempld";
+import store from "@store/index";
 
 const userTempId = getUserTempld();
 const instance = axiso.create({
@@ -11,6 +12,10 @@ const instance = axiso.create({
 instance.interceptors.request.use((config) => {
   NProgress.start();
   config.headers.userTempId = userTempId;
+  const token = store.state.user.token;
+  if (token) {
+    config.headers.token = token;
+  }
 
   return config;
 });

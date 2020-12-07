@@ -4,7 +4,11 @@
       <div class="header-top-inner">
         <div class="header-inner-left">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <p v-if="this.$store.state.user.name" class="Amind">
+            <span class="left-one-a">{{ this.$store.state.user.name }}</span>
+            <button class="left-one-a">退出登陆</button>
+          </p>
+          <p v-else>
             <span>请</span>
             <router-link to="/login" class="left-one-a"> 登录</router-link>
             <router-link to="/register" class="left-one-a">
@@ -99,8 +103,11 @@ export default {
     justify-content: space-between;
   }
   .header-inner-left {
+    .Amind {
+      display: flex;
+    }
     height: 100%;
-    width: 212px;
+    width: 250px;
     display: flex;
     line-height: 30px;
     p:nth-of-type(1) {

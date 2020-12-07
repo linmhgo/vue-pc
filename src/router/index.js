@@ -8,6 +8,10 @@ import Search from "@views/Search";
 import Detail from "@views/Detail";
 import AddCartSuccess from "@views/AddCartSuccess";
 import ShopCart from "@views/ShopCart";
+import Pay from "@views/Pay";
+import PaySuccess from "@views/PaySuccess";
+import Trade from "@views/Trade";
+import Center from "@views/Center";
 
 Vue.use(vueRouter);
 const push = VueRouter.prototype.push;
@@ -65,6 +69,26 @@ export default new vueRouter({
       name: "addcartsuccess",
       path: "/addcartsuccess",
       component: AddCartSuccess,
+    },
+    {
+      name: "trade",
+      path: "/trade",
+      component: Trade,
+    },
+    {
+      name: "pay",
+      path: "/pay",
+      component: Pay,
+    },
+    {
+      name: "paysuccess",
+      path: "/paysuccess",
+      component: PaySuccess,
+    },
+    {
+      name: "center",
+      path: "/center/myorder",
+      component: Center,
     },
   ],
   scrollBehavior() {
