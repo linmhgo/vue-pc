@@ -87,33 +87,21 @@
               <dl v-for="spuSaleAttr in spuSaleAttrList" :key="spuSaleAttr.id">
                 <dt class="title">{{ spuSaleAttr.saleAttrName }}</dt>
                 <dd
+                  @click="
+                    getActiveId(
+                      spuSaleAttrValue.id,
+                      spuSaleAttr.spuSaleAttrValueList
+                    )
+                  "
                   changepirce="0"
                   :class="{
-                    active:
-                      (spuSaleAttrValue.id === checkedId[0] &&
-                        spuSaleAttr.baseSaleAttrId === 1) ||
-                      (spuSaleAttrValue.id === checkedId[1] &&
-                        spuSaleAttr.baseSaleAttrId === 2) ||
-                      (spuSaleAttrValue.id === checkedId[2] &&
-                        spuSaleAttr.baseSaleAttrId === 3),
+                    active: spuSaleAttrValue.isChecked === 1,
                   }"
                   v-for="spuSaleAttrValue in spuSaleAttr.spuSaleAttrValueList"
                   :key="spuSaleAttrValue.id"
-                  @click="
-                    getActiveId(spuSaleAttrValue.id, spuSaleAttr.baseSaleAttrId)
-                  "
                 >
                   {{ spuSaleAttrValue.saleAttrValueName }}
                 </dd>
-                <!-- <dd>
-                  {{ spuSaleAttr.spuSaleAttrValueList[1].saleAttrValueName }}
-                </dd>
-                <dd>
-                  {{ spuSaleAttr.spuSaleAttrValueList[2].saleAttrValueName }}
-                </dd>
-                <dd>
-                  {{ spuSaleAttr.spuSaleAttrValueList[3].saleAttrValueName }}
-                </dd> -->
               </dl>
             </div>
             <div class="cartWrap">
@@ -393,17 +381,14 @@ export default {
     imageListIndex(index) {
       this.imgIndex = index;
     },
-    getActiveId(valueId, AttrId) {
-      console.log(this.checkedId);
-      if (AttrId === 1) {
-        this.checkedId[AttrId - 1] = valueId;
-      }
-      if (AttrId === 2) {
-        this.checkedId[AttrId - 1] = valueId;
-      }
-      if (AttrId === 3) {
-        this.checkedId[AttrId - 1] = valueId;
-      }
+    getActiveId(valueId, valueList) {
+      //点击的时候清除其他被选中的，给点击中的元素设置属性
+      valueList.forEach((item) => {
+        item.isChecked = 0;
+        if (item.id === valueId) {
+          item.isChecked = 1;
+        }
+      });
     },
     //添加购物车发送的请求，确保添加不能出错才跳转
     addCart() {

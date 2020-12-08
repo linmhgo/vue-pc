@@ -6,7 +6,7 @@
           <p>尚品汇欢迎您！</p>
           <p v-if="this.$store.state.user.name" class="Amind">
             <span class="left-one-a">{{ this.$store.state.user.name }}</span>
-            <button class="left-one-a">退出登陆</button>
+            <button class="left-one-a" @click="logOut">退出登陆</button>
           </p>
           <p v-else>
             <span>请</span>
@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import { reqLogOut } from "../../api/user";
+
 export default {
   name: "Header",
   data() {
@@ -75,6 +77,13 @@ export default {
       } else {
         this.$router.push(location);
       }
+    },
+    async logOut() {
+      await reqLogOut();
+      localStorage.removeItem("name");
+      localStorage.removeItem("token");
+      // this.$router.push("/login");
+      this.$router.push("/login");
     },
   },
   mounted() {

@@ -23,3 +23,10 @@ export const reqRegister = function({ phone, password, code }) {
     },
   });
 };
+//退出登录
+export const reqLogOut = () => {
+  return request({
+    method: "GET",
+    url: "/user/passport/logout",
+  });
+};

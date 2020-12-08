@@ -12,6 +12,7 @@ import Pay from "@views/Pay";
 import PaySuccess from "@views/PaySuccess";
 import Trade from "@views/Trade";
 import Center from "@views/Center";
+import store from "@store/index";
 
 Vue.use(vueRouter);
 const push = VueRouter.prototype.push;
@@ -30,7 +31,7 @@ VueRouter.prototype.replace = function(location, onComplete, onAbort) {
   return replace.call(this, location, onComplete, () => {});
 };
 
-export default new vueRouter({
+const router = new vueRouter({
   routes: [
     {
       path: "/",
@@ -95,3 +96,11 @@ export default new vueRouter({
     return { x: 0, y: 0 };
   },
 });
+const localtion = ["/pay", "/paysuccess", "/trade", "/center/myorder"];
+router.beforeEach((to, from, next) => {
+  if (localtion.indexOf(to.path) > -1 && !store.state.user.token) {
+    next("/login");
+  }
+  next();
+});
+export default router;

@@ -10,7 +10,7 @@
       </h3>
       <div class="content">
         <label>手机号:</label>
-        <ValidationProvider rules="length|phone" v-slot="{ errors }">
+        <ValidationProvider rules="required|length|phone" v-slot="{ errors }">
           <input
             type="text"
             placeholder="请输入你的手机号"
@@ -32,25 +32,25 @@
       </div>
       <div class="content">
         <label>登录密码:</label>
-        <ValidationProvider rules="password" v-slot="{ errors }">
-          <input
-            type="text"
-            placeholder="请输入你的登录密码"
-            v-model="user.password"
-          />
-          <span class="error-msg">{{ errors[0] }}</span>
-        </ValidationProvider>
+        <!-- <ValidationProvider rules="password" v-slot="{ errors }"> -->
+        <input
+          type="text"
+          placeholder="请输入你的登录密码"
+          v-model="user.password"
+        />
+        <!-- <span class="error-msg">{{ errors[0] }}</span> -->
+        <!-- </ValidationProvider> -->
       </div>
       <div class="content">
         <label>确认密码:</label>
-        <ValidationProvider rules="make" v-slot="{ errors }">
-          <input
-            type="text"
-            placeholder="请输入确认密码"
-            v-model="user.makePassword"
-          />
-          <span class="error-msg">{{ errors[0] }}</span>
-        </ValidationProvider>
+        <!-- <ValidationProvider rules="make" v-slot="{ errors }"> -->
+        <input
+          type="text"
+          placeholder="请输入确认密码"
+          v-model="user.makePassword"
+        />
+        <!-- <span class="error-msg">{{ errors[0] }}</span> -->
+        <!-- </ValidationProvider> -->
       </div>
       <div class="controls">
         <input name="m1" type="checkbox" v-model="user.isAgree" />
@@ -83,6 +83,12 @@
 <script>
 import { mapActions } from "vuex";
 import { ValidationProvider, extend } from "vee-validate";
+import { required } from "vee-validate/dist/rules";
+
+extend("required", {
+  ...required,
+  message: "手机号必须要填写", // 错误信息
+});
 
 extend("length", {
   validate(value) {
@@ -98,18 +104,18 @@ extend("phone", {
   },
   message: "手机号格式不正确",
 });
-extend("password", {
-  validate(value) {
-    return /^[a-zA-Z0-9]{4,10}$/.test(value);
-  },
-  message: "密码格式不正确",
-});
-extend("make", {
-  validate(value) {
-    return value === this.password;
-  },
-  message: "两次密码不一致",
-});
+// extend("password", {
+//   validate(value) {
+//     return /^[a-zA-Z0-9]{4,10}$/.test(value);
+//   },
+//   message: "密码格式不正确",
+// });
+// extend("make", {
+//   validate(value) {
+//     return value === this.password;
+//   },
+//   message: "两次密码不一致",
+// });
 export default {
   name: "Register",
   data() {
