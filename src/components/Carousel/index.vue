@@ -2,10 +2,11 @@
   <div class="swiper-container" ref="swiper">
     <div class="swiper-wrapper carousel-center">
       <div class="swiper-slide" v-for="img in carouselImg" :key="img.id">
-        <img :src="img.imgUrl" alt="" />
+        <img v-lazy="img.imgUrl" alt="" />
       </div>
     </div>
     <!-- 如果需要分页器 -->
+
     <div class="swiper-pagination"></div>
     <!-- 如果需要导航按钮 -->
     <div class="swiper-button-prev"></div>

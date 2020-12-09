@@ -44,7 +44,6 @@ export default {
     ...mapActions(["getFloorsData"]),
   },
   mounted() {
-    console.log(this);
     this.getFloorsData();
   },
 };

@@ -1,18 +1,35 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import vueRouter from "vue-router";
-import Home from "@views/Home";
-import Login from "@views/Login";
-import Register from "@views/Register";
-import Search from "@views/Search";
-import Detail from "@views/Detail";
-import AddCartSuccess from "@views/AddCartSuccess";
-import ShopCart from "@views/ShopCart";
-import Pay from "@views/Pay";
-import PaySuccess from "@views/PaySuccess";
-import Trade from "@views/Trade";
-import Center from "@views/Center";
+// import Home from "@views/Home";
+// import Login from "@views/Login";
+// import Register from "@views/Register";
+// import Search from "@views/Search";
+// import Detail from "@views/Detail";
+// import AddCartSuccess from "@views/AddCartSuccess";
+// import ShopCart from "@views/ShopCart";
+// import Pay from "@views/Pay";
+// import PaySuccess from "@views/PaySuccess";
+// import Trade from "@views/Trade";
+// import Center from "@views/Center";
 import store from "@store/index";
+const Home = () => import(/* webpackChunkName: "Home" */ "../views/Home");
+const Login = () => import(/* webpackChunkName: "Login" */ "../views/Login");
+const Register = () =>
+  import(/* webpackChunkName: "Register" */ "../views/Register");
+const Search = () => import(/* webpackChunkName: "Home" */ "../views/Search");
+const Detail = () => import(/* webpackChunkName: "Search" */ "../views/Detail");
+const AddCartSuccess = () =>
+  import(/* webpackChunkName: "AddCartSuccess" */ "../views/AddCartSuccess");
+const ShopCart = () =>
+  import(/* webpackChunkName: "ShopCart" */ "../views/ShopCart");
+const Pay = () =>
+  import(/* webpackChunkName: "ShopCart" */ "../views/ShopCart");
+const PaySuccess = () =>
+  import(/* webpackChunkName: "PaySuccess" */ "../views/PaySuccess");
+const Trade = () =>
+  import(/* webpackChunkName: "PaySuccess" */ "../views/PaySuccess");
+const Center = () => import(/* webpackChunkName: "Center" */ "../views/Center");
 
 Vue.use(vueRouter);
 const push = VueRouter.prototype.push;

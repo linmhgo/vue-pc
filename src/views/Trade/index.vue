@@ -109,6 +109,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { reqTradeList, reqSubmitOrder } from "@api/pay";
 
 export default {
@@ -121,6 +122,9 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      addCratsu: (state) => state.shopcart.addCratsu,
+    }),
     selectAddress() {
       const {
         selectedId,

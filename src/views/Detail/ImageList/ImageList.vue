@@ -45,10 +45,17 @@ export default {
 
 <style lang="less" scoped>
 .swiper-container {
+  display: flex;
   height: 56px;
   width: 412px;
   box-sizing: border-box;
   padding: 0 12px;
+  overflow: hidden;
+  .swiper-wrapper {
+    display: flex;
+    height: 56px;
+    width: 412px;
+  }
 
   .swiper-slide {
     width: 56px;
@@ -74,13 +81,15 @@ export default {
       }
     }
   }
-
+  position: relative;
   .swiper-button-next {
+    position: absolute;
     left: auto;
     right: 0;
   }
 
   .swiper-button-prev {
+    position: absolute;
     left: 0;
     right: auto;
   }

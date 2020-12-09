@@ -114,7 +114,7 @@
                   :max="10"
                 ></el-input-number>
               </div>
-              <div class="add" @click="addCart">
+              <div class="add" @click="addCart()">
                 <a href="javascript:">加入购物车</a>
               </div>
             </div>
@@ -354,7 +354,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 import ImageList from "./ImageList/ImageList";
 import Zoom from "./Zoom/Zoom";
 import TypeNav from "@comps/Type-nav";
@@ -374,10 +374,13 @@ export default {
     TypeNav,
   },
   computed: {
+    ...mapState({
+      addCratsu: (state) => state.shopcart.addCratsu,
+    }),
     ...mapGetters(["spuSaleAttrList", "categoryView", "skuInfo"]),
   },
   methods: {
-    ...mapActions(["getProductDetail", "updateCartCount"]),
+    ...mapActions(["getProductDetail", "updateCartCount", "addCratSuccess"]),
     imageListIndex(index) {
       this.imgIndex = index;
     },
@@ -392,12 +395,22 @@ export default {
     },
     //添加购物车发送的请求，确保添加不能出错才跳转
     addCart() {
+      const { imgIndex } = this;
+      const { skuImageList, skuName } = this.skuInfo;
+      let str = JSON.stringify(skuImageList);
+      sessionStorage.setItem("skuImageList", str);
+      sessionStorage.setItem("imgIndex", imgIndex);
+      sessionStorage.setItem("skuName", skuName);
+      // this.addCratSuccess({ imgIndex, skuImageList });
       try {
         this.updateCartCount({
           skuId: this.skuInfo.id,
           skuNum: this.num,
         });
-        this.$router.push(`/addcartsuccess?skuNum=${this.skuNum}`);
+        this.$router.push(`/addcartsuccess?skuNum=${this.num}`);
+        // setTimeout(() => {
+        //   this.$bus.$emit("argument", imgIndex, skuImageList);
+        // });
       } catch (e) {
         console.log(e);
       }

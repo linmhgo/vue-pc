@@ -4,9 +4,9 @@
       <div class="header-top-inner">
         <div class="header-inner-left">
           <p>尚品汇欢迎您！</p>
-          <p v-if="this.$store.state.user.name" class="Amind">
-            <span class="left-one-a">{{ this.$store.state.user.name }}</span>
-            <button class="left-one-a" @click="logOut">退出登陆</button>
+          <p v-if="userName" class="Amind">
+            <span class="left-one-a">{{ userName }}</span>
+            <button class="left-one-a" @click="exit">退出登陆</button>
           </p>
           <p v-else>
             <span>请</span>
@@ -45,14 +45,17 @@
 </template>
 
 <script>
-import { reqLogOut } from "../../api/user";
-
 export default {
   name: "Header",
   data() {
     return {
       searchText: "",
     };
+  },
+  computed: {
+    userName() {
+      return this.$store.state.user.name;
+    },
   },
   methods: {
     search() {
@@ -78,11 +81,10 @@ export default {
         this.$router.push(location);
       }
     },
-    async logOut() {
-      await reqLogOut();
-      localStorage.removeItem("name");
+    async exit() {
+      await this.$store.dispatch("LogOut");
       localStorage.removeItem("token");
-      // this.$router.push("/login");
+      localStorage.removeItem("name");
       this.$router.push("/login");
     },
   },

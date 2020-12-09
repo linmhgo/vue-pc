@@ -118,9 +118,9 @@ export default {
   },
   created() {
     // 读取token看看有没有
-    if (this.token) {
-      this.$router.replace("/");
-    }
+    // if (this.token) {
+    //   this.$router.replace("/");
+    // }
   },
   methods: {
     async submit() {

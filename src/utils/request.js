@@ -6,8 +6,12 @@ import getUserTempld from "./getUserTempld";
 import store from "@store/index";
 
 const userTempId = getUserTempld();
+console.log(process.env.NODE_ENV);
+const localtion =
+  process.env.NODE_ENV === "development" ? "/" : "http://182.92.128.115/";
+
 const instance = axiso.create({
-  baseURL: "/api",
+  baseURL: `${localtion}api`,
 });
 instance.interceptors.request.use((config) => {
   NProgress.start();

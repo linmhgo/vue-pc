@@ -1,4 +1,4 @@
-import { reqRegister, reqLogin } from "@api/user";
+import { reqRegister, reqLogin, reqLogOut } from "@api/user";
 
 export default {
   state: {
@@ -15,11 +15,18 @@ export default {
       const getLogin = await reqLogin(phone, password);
       commit("LOGIN", getLogin);
     },
+    async LogOut({ commit }) {
+      await reqLogOut();
+      commit("LOG_OUT");
+    },
   },
   mutations: {
     LOGIN(state, getLogin) {
       state.name = getLogin.name;
       state.token = getLogin.token;
+    },
+    LOG_OUT(state) {
+      (state.name = ""), (state.token = "");
     },
   },
 };

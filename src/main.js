@@ -7,6 +7,7 @@ import "./plugins/element";
 import store from "./store";
 import "./mock/mockServer";
 import "./styles/iconfont.css";
+import "./plugins/lazyload";
 
 new Vue({
   beforeCreate() {

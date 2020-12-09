@@ -9,13 +9,16 @@ export default {
   state: {
     cartList: [],
     allShow: false,
+    addCratsu: {
+      imgIndex: 0,
+      skuImageList: {},
+    },
   },
   getters: {},
   actions: {
     //购物车数据请求
     async getCartList({ commit }) {
       const cartList = await reqGetCartList();
-      console.log(cartList);
       commit("GET_CART_LIST", cartList);
     },
     //购物车添加请求
@@ -41,6 +44,9 @@ export default {
     //点击全选中取消数据
     clickAllChecked({ commit }) {
       commit("CLICK_ALL_CHECKED");
+    },
+    addCratSuccess({ commit }, { imgIndex, skuImageList }) {
+      commit("ADD_CRAT_SUCCESS", { imgIndex, skuImageList });
     },
   },
   mutations: {
@@ -92,6 +98,10 @@ export default {
         cart.isChecked = state.allShow === true ? 1 : 0;
         return cart;
       });
+    },
+    ADD_CRAT_SUCCESS(state, { imgIndex, skuImageList }) {
+      state.addCratsu.skuImageList = skuImageList;
+      state.addCratsu.imgIndex = imgIndex;
     },
   },
 };
