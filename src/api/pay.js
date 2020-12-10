@@ -39,3 +39,10 @@ export const reqQrCode = (orderId) => {
     url: `/payment/weixin/createNative/${orderId}`,
   });
 };
+
+export const reqAllTradeList = function({ page, limit }) {
+  return request({
+    method: "GET",
+    url: `/order/auth/${page}/${limit}`,
+  });
+};
