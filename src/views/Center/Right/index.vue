@@ -59,7 +59,7 @@
                 width="8%"
                 class="center"
               >
-                小丽
+                {{ record.consignee }}
               </td>
               <td
                 :rowspan="record.orderDetailList.length"
@@ -67,7 +67,7 @@
                 class="center"
               >
                 <ul class="unstyled">
-                  <li>总金额¥138.00</li>
+                  <li>总金额¥{{ record.totalAmount }}</li>
                   <li>在线支付</li>
                 </ul>
               </td>
@@ -100,7 +100,7 @@
       layout="prev, pager, next"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :total="allTradeLists.total"
+      :total="+allTradeLists.total"
     >
     </el-pagination>
   </div>
@@ -115,6 +115,7 @@ export default {
   data() {
     return {
       data: 1,
+      price: 0,
     };
   },
   computed: {
@@ -132,10 +133,21 @@ export default {
       this.allTradeList({ page, limit });
     },
   },
-  mounted() {
+  async mounted() {
     const page = this.data;
     const limit = 2;
-    this.allTradeList({ page, limit });
+    await this.allTradeList({ page, limit });
+    // const price = this.allTradeLists.records.map((record) => {
+    //   return record.orderDetailList.reduce((p, c) => {
+    //     return p + c.orderPrice;
+    //   }, 0);
+    // });
+    // this.price = price.reduce((p, c) => {
+    //   return p + c;
+    // }, 0);
+  },
+  watch: {
+    // allTradeLists() {},
   },
 };
 </script>

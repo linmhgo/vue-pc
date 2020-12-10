@@ -119,5 +119,12 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
-// router.beforeEach((to, from, next) => {});
+router.beforeEach((to, from, next) => {
+  if (to.path === "/login") {
+    if (localStorage.getItem("token")) {
+      next("/");
+    }
+  }
+  next();
+});
 export default router;

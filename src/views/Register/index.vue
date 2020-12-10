@@ -30,28 +30,33 @@
         />
         <!-- <span class="error-msg">错误提示信息</span> -->
       </div>
-      <div class="content">
-        <label>登录密码:</label>
-        <!-- <ValidationProvider rules="password" v-slot="{ errors }"> -->
-        <input
-          type="text"
-          placeholder="请输入你的登录密码"
-          v-model="user.password"
-        />
-        <!-- <span class="error-msg">{{ errors[0] }}</span> -->
-        <!-- </ValidationProvider> -->
-      </div>
-      <div class="content">
-        <label>确认密码:</label>
-        <!-- <ValidationProvider rules="make" v-slot="{ errors }"> -->
-        <input
-          type="text"
-          placeholder="请输入确认密码"
-          v-model="user.makePassword"
-        />
-        <!-- <span class="error-msg">{{ errors[0] }}</span> -->
-        <!-- </ValidationProvider> -->
-      </div>
+      <ValidationObserver>
+        <div class="content">
+          <label>登录密码:</label>
+          <ValidationProvider
+            rules="confirmed:user.makePassword"
+            v-slot="{ errors }"
+          >
+            <input
+              type="text"
+              placeholder="请输入你的登录密码"
+              v-model="user.password"
+            />
+            <span class="error-msg">{{ errors[0] }}</span>
+          </ValidationProvider>
+        </div>
+        <div class="content">
+          <label>确认密码:</label>
+          <ValidationProvider v-slot="{ errors }" vid="user.makePassword">
+            <input
+              type="text"
+              placeholder="请输入确认密码"
+              v-model="user.makePassword"
+            />
+            <span class="error-msg">{{ errors[0] }}</span>
+          </ValidationProvider>
+        </div>
+      </ValidationObserver>
       <div class="controls">
         <input name="m1" type="checkbox" v-model="user.isAgree" />
         <span>同意协议并注册《尚品汇用户协议》</span>
@@ -82,7 +87,7 @@
 
 <script>
 import { mapActions } from "vuex";
-import { ValidationProvider, extend } from "vee-validate";
+import { ValidationProvider, extend, ValidationObserver } from "vee-validate";
 import { required } from "vee-validate/dist/rules";
 
 extend("required", {
@@ -104,18 +109,13 @@ extend("phone", {
   },
   message: "手机号格式不正确",
 });
-// extend("password", {
-//   validate(value) {
-//     return /^[a-zA-Z0-9]{4,10}$/.test(value);
-//   },
-//   message: "密码格式不正确",
-// });
-// extend("make", {
-//   validate(value) {
-//     return value === this.password;
-//   },
-//   message: "两次密码不一致",
-// });
+extend("password", {
+  validate(value) {
+    return /^[a-zA-Z0-9]{4,10}$/.test(value);
+  },
+  message: "密码格式不正确",
+});
+
 export default {
   name: "Register",
   data() {
@@ -131,6 +131,7 @@ export default {
   },
   components: {
     ValidationProvider,
+    ValidationObserver,
   },
   methods: {
     ...mapActions(["register"]),

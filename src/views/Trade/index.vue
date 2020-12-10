@@ -144,8 +144,8 @@ export default {
   },
   methods: {
     async submit() {
-      const { tradeNo, consignee, detailArrayList } = this.tradeList;
-      const { phoneNum, userAddress } = this.selectAddress;
+      const { tradeNo, detailArrayList } = this.tradeList;
+      const { phoneNum, userAddress, consignee } = this.selectAddress;
       const orderId = await reqSubmitOrder({
         tradeNo,
         consignee,
