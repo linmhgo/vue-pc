@@ -23,12 +23,10 @@ const AddCartSuccess = () =>
   import(/* webpackChunkName: "AddCartSuccess" */ "../views/AddCartSuccess");
 const ShopCart = () =>
   import(/* webpackChunkName: "ShopCart" */ "../views/ShopCart");
-const Pay = () =>
-  import(/* webpackChunkName: "ShopCart" */ "../views/ShopCart");
+const Pay = () => import(/* webpackChunkName: "ShopCart" */ "../views/Pay");
 const PaySuccess = () =>
   import(/* webpackChunkName: "PaySuccess" */ "../views/PaySuccess");
-const Trade = () =>
-  import(/* webpackChunkName: "PaySuccess" */ "../views/PaySuccess");
+const Trade = () => import(/* webpackChunkName: "Trade" */ "../views/Trade");
 const Center = () => import(/* webpackChunkName: "Center" */ "../views/Center");
 
 Vue.use(vueRouter);
@@ -120,4 +118,6 @@ router.beforeEach((to, from, next) => {
   }
   next();
 });
+
+// router.beforeEach((to, from, next) => {});
 export default router;
